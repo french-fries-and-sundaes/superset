@@ -419,7 +419,7 @@
       "js-yaml": "^4.3.1"
     },
     "minimatch@>=10": {
-      "brace-expansion": ">=5.0.8"
+      "brace-expansion": ">=5.0.9"
     },
     "nanoid@>=3 <4": "3.3.18",
     "nwsapi": "^2.2.24",
