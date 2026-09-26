@@ -391,6 +391,7 @@
     "@luma.gl/gltf": "~9.2.5",
     "@luma.gl/shadertools": "~9.2.5",
     "@luma.gl/webgl": "~9.2.5",
+    "brace-expansion@>=4": ">=5.0.9",
     "core-js": "^3.38.1",
     "cosmiconfig": {
       "js-yaml": "^4.3.1"
@@ -417,9 +418,6 @@
     "jspdf": "^4.2.0",
     "lerna": {
       "js-yaml": "^4.3.1"
-    },
-    "minimatch@>=10": {
-      "brace-expansion": ">=5.0.9"
     },
     "nanoid@>=3 <4": "3.3.18",
     "nwsapi": "^2.2.24",
