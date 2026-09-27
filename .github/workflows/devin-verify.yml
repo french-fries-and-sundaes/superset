@@ -34,6 +34,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      # mypy is not in any requirements file: pre-commit runs it from an isolated environment.
+      # Mirror the mypy version and stubs pinned in .pre-commit-config.yaml (mirrors-mypy hook).
+      - name: Install mypy and type stubs
+        run: |
+          uv pip install --system "mypy==1.15.0" \
+            types-cachetools types-simplejson types-python-dateutil types-requests \
+            types-pytz types-croniter types-PyYAML types-setuptools types-paramiko types-Markdown
+
       # The issue text is untrusted, so it is NEVER placed in this file or in a shell string:
       # it is read from the API by the script, validated against an allowlist, then executed.
       - name: Run the issue's verify command
