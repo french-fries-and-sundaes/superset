@@ -16,7 +16,7 @@ permissions:
 jobs:
   verify:
     # Only pull requests that say "Closes #N" (the ones Devin opens for a task).
-    if: contains(github.event.pull_request.body, 'Closes #') || contains(github.event.pull_request.body, 'closes #') || contains(github.event.pull_request.body, 'Fixes #')
+    if: "contains(github.event.pull_request.body, 'Closes #') || contains(github.event.pull_request.body, 'closes #') || contains(github.event.pull_request.body, 'Fixes #')"
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
