@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+from datetime import timedelta
 from typing import Any, Callable, Optional, TYPE_CHECKING, Union
 
 from flask import current_app, Flask
@@ -93,23 +94,25 @@ class SupersetCache(Cache):
 
     def memoize(
         self,
-        timeout: int | None = None,
-        make_name: Callable[..., Any] | None = None,
+        timeout: int | timedelta | None = None,
+        make_name: Callable[..., str] | None = None,
         unless: Callable[..., bool] | None = None,
         forced_update: Callable[..., bool] | None = None,
+        is_stale: Callable[..., bool] | None = None,
         response_filter: Callable[..., Any] | None = None,
-        hash_method: Callable[..., Any] = configurable_hash_method,
+        hash_method: Callable[..., Any] | None = None,
         cache_none: bool = False,
         source_check: bool | None = None,
-        args_to_ignore: Any | None = None,
+        args_to_ignore: list[str] | None = None,
     ) -> Callable[..., Any]:
         return super().memoize(
             timeout=timeout,
             make_name=make_name,
             unless=unless,
             forced_update=forced_update,
+            is_stale=is_stale,
             response_filter=response_filter,
-            hash_method=hash_method,
+            hash_method=hash_method or configurable_hash_method,
             cache_none=cache_none,
             source_check=source_check,
             args_to_ignore=args_to_ignore,
@@ -117,13 +120,14 @@ class SupersetCache(Cache):
 
     def cached(
         self,
-        timeout: int | None = None,
-        key_prefix: str = "view/%s",
-        unless: Callable[..., bool] | None = None,
-        forced_update: Callable[..., bool] | None = None,
+        timeout: int | timedelta | None = None,
+        key_prefix: str | Callable[[], str] = "view/%s",
+        unless: Callable[..., Any] | None = None,
+        forced_update: Callable[..., Any] | None = None,
+        is_stale: Callable[..., Any] | None = None,
         response_filter: Callable[..., Any] | None = None,
         query_string: bool = False,
-        hash_method: Callable[..., Any] = configurable_hash_method,
+        hash_method: Callable[..., Any] | None = None,
         cache_none: bool = False,
         make_cache_key: Callable[..., Any] | None = None,
         source_check: bool | None = None,
@@ -134,9 +138,10 @@ class SupersetCache(Cache):
             key_prefix=key_prefix,
             unless=unless,
             forced_update=forced_update,
+            is_stale=is_stale,
             response_filter=response_filter,
             query_string=query_string,
-            hash_method=hash_method,
+            hash_method=hash_method or configurable_hash_method,
             cache_none=cache_none,
             make_cache_key=make_cache_key,
             source_check=source_check,
@@ -146,14 +151,14 @@ class SupersetCache(Cache):
     # pylint: disable=protected-access
     def _memoize_make_cache_key(
         self,
-        make_name: Callable[..., Any] | None = None,
-        hash_method: Callable[..., Any] = configurable_hash_method,
+        make_name: Callable[..., str] | None = None,
+        hash_method: Callable[..., Any] | None = None,
         source_check: bool | None = False,
-        args_to_ignore: Any | None = None,
+        args_to_ignore: list[str] | None = None,
     ) -> Callable[..., Any]:
         return super()._memoize_make_cache_key(
             make_name=make_name,
-            hash_method=hash_method,
+            hash_method=hash_method or configurable_hash_method,
             source_check=source_check,
             args_to_ignore=args_to_ignore,
         )
