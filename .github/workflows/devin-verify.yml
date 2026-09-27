@@ -16,7 +16,7 @@ permissions:
 jobs:
   verify:
     # Only pull requests that say "Closes #N" (the ones Devin opens for a task).
-    if: contains(github.event.pull_request.body, 'Closes #') || contains(github.event.pull_request.body, 'closes #') || contains(github.event.pull_request.body, 'Fixes #')
+    if: "contains(github.event.pull_request.body, 'Closes #') || contains(github.event.pull_request.body, 'closes #') || contains(github.event.pull_request.body, 'Fixes #')"
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -24,12 +24,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      # Superset needs Node 24 and npm 11 (npm 10 cannot read the lockfile) and Python 3.11.
+      # Superset needs Node 24 and npm 11 (npm 10 cannot read the lockfile) and Python 3.11
+      # with the development requirements installed (pytest, mypy, ruff, pip-audit, ...).
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
       - run: npm install -g npm@11
-      - uses: actions/setup-python@v5
+      - uses: ./.github/actions/setup-backend
         with:
           python-version: "3.11"
 
